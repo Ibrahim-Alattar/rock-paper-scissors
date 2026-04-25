@@ -20,12 +20,11 @@ body {
   font-size: 24px;
   margin: 30px 0;
   display: inline-block;
-  width: 300px;
+  width: 350px;
   text-align: center;
+  line-height: 1.8;
 }
-h3{
-  margin-bottom: 30px;
-}
+
 /* Buttons Container */
 .buttons {
   display: flex;
@@ -60,4 +59,19 @@ button:hover {
 
 .scissors {
   background-color: #22c55e;
+}
+
+#reset{
+  background-color: plum;
+  margin-top: 50px;
+}
+
+.you {
+  color: green;
+  font-weight: bold;
+}
+
+.computer {
+  color: red;
+  font-weight: bold;
 }

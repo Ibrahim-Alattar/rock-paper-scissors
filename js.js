@@ -3,28 +3,17 @@ let computerScore = 0;
 let level = 0;
 let gameActive = true;
 
-const buttons = document.querySelectorAll(".buttons button");
-const resetBtn = document.getElementById("reset");
+const buttons = document.querySelectorAll("button");
+const resetBtn = document.querySelector("#reset");
+const resultDiv = document.querySelector("#result"); // UI element
 
-const scoreDiv = document.querySelector(".score");
-
-// create a fixed status line
-const statusDiv = document.createElement("div");
-document.body.insertBefore(statusDiv, scoreDiv);
+// --------------------
+// GAME LOGIC
+// --------------------
 
 function getComputerChoice() {
   const choices = ["rock", "paper", "scissors"];
   return choices[Math.floor(Math.random() * choices.length)];
-}
-
-function updateScore() {
-  scoreDiv.innerHTML = `
-    <div>Score</div>
-    <div>
-      <span class="you">You: ${humanScore}</span> | 
-      <span class="computer">Computer: ${computerScore}</span>
-    </div>
-  `;
 }
 
 function playRound(humanChoice, computerChoice) {
@@ -36,7 +25,7 @@ function playRound(humanChoice, computerChoice) {
     (humanChoice === "scissors" && computerChoice === "paper")
   ) {
     humanScore++;
-    message = `You win this round! ${humanChoice} beats ${computerChoice}`;
+    message = `You win! ${humanChoice} beats ${computerChoice}`;
   }
   else if (
     (computerChoice === "rock" && humanChoice === "scissors") ||
@@ -44,15 +33,27 @@ function playRound(humanChoice, computerChoice) {
     (computerChoice === "scissors" && humanChoice === "paper")
   ) {
     computerScore++;
-    message = `Computer wins this round! ${computerChoice} beats ${humanChoice}`;
+    message = `Computer wins! ${computerChoice} beats ${humanChoice}`;
   }
   else {
-    message = `This round is a tie!`;
+    message = `It's a tie!`;
   }
 
-  statusDiv.textContent = message;
-  updateScore();
+  showResult(`${message}
+Score → You: ${humanScore} | Computer: ${computerScore}`);
 }
+
+// --------------------
+// UI LAYER
+// --------------------
+
+function showResult(text) {
+  resultDiv.textContent = text;
+}
+
+// --------------------
+// CONTROL LAYER
+// --------------------
 
 function handleGameClick(e) {
   if (!gameActive) return;
@@ -66,17 +67,14 @@ function handleGameClick(e) {
 
   if (level >= 5) {
     gameActive = false;
-
-    let result =
-      humanScore > computerScore
-        ? "🎉 You Win the Game!"
-        : computerScore > humanScore
-          ? "💻 Computer Wins the Game!"
-          : "🤝 It's a Draw!";
-
-    statusDiv.textContent = result;
+    showResult(`Game Over!
+Final Score → You: ${humanScore} | Computer: ${computerScore}`);
   }
 }
+
+// --------------------
+// RESET GAME
+// --------------------
 
 function resetGame() {
   humanScore = 0;
@@ -84,16 +82,15 @@ function resetGame() {
   level = 0;
   gameActive = true;
 
-  statusDiv.textContent = "Game reset. Make your move!";
-  updateScore();
+  showResult("New game started! Make your move.");
 }
+
+// --------------------
+// EVENT LISTENERS
+// --------------------
 
 buttons.forEach(btn => {
   btn.addEventListener("click", handleGameClick);
 });
 
 resetBtn.addEventListener("click", resetGame);
-
-// initial score display
-updateScore();
-statusDiv.textContent = "Start playing!";
